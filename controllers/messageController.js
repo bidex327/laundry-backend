@@ -2,10 +2,10 @@ const Message = require("../models/messageSchema");
 const transport = require("../config/mail");
 
 const sendMessage = async (req, res) => {
-  const { name, phoneNumber, email, message } = req.body;
+  const { name, phoneNumber, email, message, service } = req.body;
 
   try {
-    await Message.create({ name, phoneNumber, email, message });
+    await Message.create({ name, phoneNumber, email, message, service });
 
     await transport.sendMail({
       from: email,
@@ -14,7 +14,8 @@ const sendMessage = async (req, res) => {
       text: `${name}
             ${phoneNumber}
             ${email}
-            ${message}`,
+            ${message}
+            ${service}`,
     });
     res.status(200).json({ success: true, message: "Email sent!!" });
   } catch (error) {
